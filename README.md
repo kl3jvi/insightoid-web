@@ -1,8 +1,8 @@
-# Your Project Title
+# Insightoid Dashboard
 
 ## Description
 
-A detailed description of your dashboard, its features, and its purpose.
+Insightoid is a dashboard for an Android SDK. It is designed to monitor and manage crashes from Android applications. With Insightoid, you can track crashes in real-time, analyze their causes, and work towards improving the stability of your applications.
 
 ## Demo
 
@@ -24,7 +24,7 @@ N/A
 
 ## Usage
 
-Instructions on how to use your dashboard, including any necessary commands.
+After setting up the dashboard locally, you can start monitoring crashes by integrating the Insightoid SDK into your Android applications. Detailed instructions on how to integrate the SDK and use the dashboard will be provided.
 
 ## Contributing
 
@@ -32,4 +32,4 @@ Instructions on how others can contribute to your project.
 
 ## License
 
-Licensed under MIT (https://github.com/your-github-username/your-repo/blob/master/LICENSE.md)
+Licensed under MIT License. View [license](LICENSE).
