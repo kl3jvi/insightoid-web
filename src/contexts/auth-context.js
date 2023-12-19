@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -11,6 +12,22 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null
+};
+
+const generatePayload = (userData) => {
+  console.log({
+    id: userData?.userId,
+    avatar: `https://ui-avatars.com/api/?format=svg&background=random&name=${userData.username}`,
+    username: userData.username,
+    email: userData.email
+  });
+
+  return {
+    id: userData?.userId,
+    avatar: `https://ui-avatars.com/api/?format=svg&background=random&name=${userData.username}`,
+    username: userData.username,
+    email: userData.email
+  };
 };
 
 const handlers = {
@@ -75,22 +92,33 @@ export const AuthProvider = (props) => {
     let isAuthenticated = false;
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      isAuthenticated = Cookies.get('authenticated') === 'true';
     } catch (err) {
       console.error(err);
     }
 
     if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      };
+      // Fetch the user data from your server
+      const res = await fetch('https://insightoid-backend.fly.dev/api/auth/user', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Cookies.get('token')}` // Use the token from cookies
+        }
+      });
+
+      if (!res.ok) {
+        dispatch({
+          type: HANDLERS.INITIALIZE
+        });
+        return;
+      }
+
+      const authenticationData = await res.json();
 
       dispatch({
         type: HANDLERS.INITIALIZE,
-        payload: user
+        payload: generatePayload(authenticationData.data) // Set the payload to the user data returned from the server
       });
     } else {
       dispatch({
@@ -107,55 +135,75 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const skip = () => {
-    try {
-      window.sessionStorage.setItem('authenticated', 'true');
-    } catch (err) {
-      console.error(err);
+  const signIn = async (username, password) => {
+    const res = await fetch('https://insightoid-backend.fly.dev/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to log in');
     }
 
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
+    let authData;
+    try {
+      authData = await res.json();
+    } catch (err) {
+      console.error('Failed to parse JSON response', err);
+      return;
+    }
 
+    Cookies.set('authenticated', 'true');
+    Cookies.set('token', authData.authToken); // Save the token in cookies
     dispatch({
       type: HANDLERS.SIGN_IN,
-      payload: user
+      payload: generatePayload(authData.data)
     });
   };
 
-  const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
+  const signUp = async (email, username, password) => {
+    const res = await fetch(`https://insightoid-backend.fly.dev/api/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, username, password })
+    });
+
+    if (!res.ok) {
+      // check the error code and respond based on that
+      if (res.status === 409) {
+        throw new Error('User already exists');
+      } else if (res.status === 400) {
+        throw new Error('Invalid email');
+      } else {
+        throw new Error('Failed to sign up');
+      }
     }
 
+    let authData;
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
+      authData = await res.json();
     } catch (err) {
-      console.error(err);
+      console.error('Failed to parse JSON response', err);
+      return;
     }
 
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
+    Cookies.set('authenticated', 'true');
+    Cookies.set('token', authData.authToken); // Save the token in cookies
 
     dispatch({
       type: HANDLERS.SIGN_IN,
-      payload: user
+      payload: generatePayload(authData.data)
     });
   };
-
-  const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
-  };
-
   const signOut = () => {
+    Cookies.remove('authenticated');
+    Cookies.remove('token');
+
     dispatch({
       type: HANDLERS.SIGN_OUT
     });
@@ -165,7 +213,6 @@ export const AuthProvider = (props) => {
     <AuthContext.Provider
       value={{
         ...state,
-        skip,
         signIn,
         signUp,
         signOut

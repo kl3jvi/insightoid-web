@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
@@ -9,17 +10,12 @@ import {
   Typography
 } from '@mui/material';
 
-const user = {
-  avatar: '/assets/avatars/avatar-anika-visser.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Anika Visser',
-  timezone: 'GTM-7'
-};
 
-export const AccountProfile = () => (
-  <Card>
+
+export const AccountProfile = (props) => {
+  const {user} = props;
+  return (
+    <Card>
     <CardContent>
       <Box
         sx={{
@@ -40,13 +36,13 @@ export const AccountProfile = () => (
           gutterBottom
           variant="h5"
         >
-          {user.name}
+          {user.username}
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          {user.city} {user.country}
+         Tirane, Albania
         </Typography>
         <Typography
           color="text.secondary"
@@ -65,5 +61,11 @@ export const AccountProfile = () => (
         Upload picture
       </Button>
     </CardActions>
-  </Card>
-);
+  </Card>)
+};
+
+export default AccountProfile;
+
+AccountProfile.propTypes = {
+  user: PropTypes.object.isRequired
+}

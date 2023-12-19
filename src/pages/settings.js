@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Container, Stack, Typography } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { SettingsNotifications } from 'src/sections/settings/settings-notifications';
 import { SettingsPassword } from 'src/sections/settings/settings-password';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -8,7 +8,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Settings | Devias Kit
+        Settings | Insightoid
       </title>
     </Head>
     <Box
@@ -19,13 +19,19 @@ const Page = () => (
       }}
     >
       <Container maxWidth="lg">
-        <Stack spacing={3}>
-          <Typography variant="h4">
-            Settings
-          </Typography>
-          <SettingsNotifications />
-          <SettingsPassword />
-        </Stack>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h4">
+              Settings
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <SettingsNotifications />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <SettingsPassword />
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   </>

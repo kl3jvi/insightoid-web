@@ -9,8 +9,7 @@ import {
   Divider,
   FormControlLabel,
   Stack,
-  Typography,
-  Unstable_Grid2 as Grid
+  Typography
 } from '@mui/material';
 
 export const SettingsNotifications = () => {
@@ -30,67 +29,23 @@ export const SettingsNotifications = () => {
         />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={6}
-            wrap="wrap"
-          >
-            <Grid
-              xs={12}
-              sm={6}
-              md={4}
-            >
-              <Stack spacing={1}>
-                <Typography variant="h6">
-                  Notifications
-                </Typography>
-                <Stack>
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked />}
-                    label="Email"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked />}
-                    label="Push Notifications"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Text Messages"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked />}
-                    label="Phone calls"
-                  />
-                </Stack>
+          <Stack spacing={6}>
+            <Stack spacing={1}>
+              <Typography variant="h6">
+                Notifications
+              </Typography>
+              <Stack>
+                <FormControlLabel
+                  control={<Checkbox defaultChecked />}
+                  label="Email"
+                />
+                <FormControlLabel
+                  control={<Checkbox defaultChecked />}
+                  label="Push Notifications"
+                />
               </Stack>
-            </Grid>
-            <Grid
-              item
-              md={4}
-              sm={6}
-              xs={12}
-            >
-              <Stack spacing={1}>
-                <Typography variant="h6">
-                  Messages
-                </Typography>
-                <Stack>
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked />}
-                    label="Email"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Push Notifications"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked />}
-                    label="Phone calls"
-                  />
-                </Stack>
-              </Stack>
-            </Grid>
-          </Grid>
+            </Stack>
+          </Stack>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>

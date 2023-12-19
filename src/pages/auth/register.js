@@ -25,11 +25,16 @@ const Page = () => {
         .required('Email is required'),
       name: Yup
         .string()
+        .min(6, 'Must be at least 6 characters')
         .max(255)
-        .required('Name is required'),
+        .required('Username is required'),
       password: Yup
         .string()
         .max(255)
+        .matches(
+          /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
+          'Password must contain at least 8 characters, one uppercase, one number and one special case character'
+        )
         .required('Password is required')
     }),
     onSubmit: async (values, helpers) => {
@@ -48,7 +53,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Devias Kit
+          Register
         </title>
       </Head>
       <Box
@@ -100,7 +105,7 @@ const Page = () => {
                   error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
                   helperText={formik.touched.name && formik.errors.name}
-                  label="Name"
+                  label="Username"
                   name="name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}

@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ArrowPathIcon from '@heroicons/react/24/solid/ArrowPathIcon';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
@@ -8,10 +9,13 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  Select,
+  MenuItem,
   SvgIcon
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Chart } from 'src/components/chart';
+
 
 const useChartOptions = () => {
   const theme = useTheme();
@@ -72,18 +76,10 @@ const useChartOptions = () => {
         show: true
       },
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
+        'Week 1',
+        'Week 2',
+        'Week 3',
+        'Week 4'
       ],
       labels: {
         offsetY: 5,
@@ -104,27 +100,45 @@ const useChartOptions = () => {
   };
 };
 
-export const OverviewSales = (props) => {
+export const OverviewCrashFreeUsers = (props) => {
   const { chartSeries, sx } = props;
   const chartOptions = useChartOptions();
+  const [selectedDays, setSelectedDays] = useState(28); // default value is 28
 
   return (
     <Card sx={sx}>
       <CardHeader
         action={(
-          <Button
-            color="inherit"
-            size="small"
-            startIcon={(
-              <SvgIcon fontSize="small">
-                <ArrowPathIcon />
-              </SvgIcon>
-            )}
+          <Select
+            onChange={(event) => setSelectedDays(event.target.value)}
+            sx={{
+              '& .MuiSelect-select': {
+                py: 0.5,
+                pr: 1.5,
+                pl: 1.5
+              },
+              '& .MuiSvgIcon-root': {
+                ml: 0.5
+              }
+            }}
+            value={selectedDays}
+            variant="outlined"
           >
-            Sync
-          </Button>
+            <MenuItem value={7}>
+              Last 7 days
+            </MenuItem>
+            <MenuItem value={14}>
+              Last 14 days
+            </MenuItem>
+            <MenuItem value={21}>
+              Last 21 days
+            </MenuItem>
+            <MenuItem value={28}>
+              Last 28 days
+            </MenuItem>
+          </Select>
         )}
-        title="Sales"
+        title="Crash Free Users"
       />
       <CardContent>
         <Chart
@@ -135,13 +149,13 @@ export const OverviewSales = (props) => {
           width="100%"
         />
       </CardContent>
-      <Divider />
+      <Divider/>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           color="inherit"
           endIcon={(
             <SvgIcon fontSize="small">
-              <ArrowRightIcon />
+              <ArrowRightIcon/>
             </SvgIcon>
           )}
           size="small"
@@ -153,7 +167,7 @@ export const OverviewSales = (props) => {
   );
 };
 
-OverviewSales.protoTypes = {
+OverviewCrashFreeUsers.protoTypes = {
   chartSeries: PropTypes.array.isRequired,
   sx: PropTypes.object
 };

@@ -8,6 +8,7 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
   const router = useRouter();
   const auth = useAuth();
+  const { user } = auth;
 
   const handleSignOut = useCallback(
     () => {
@@ -41,11 +42,10 @@ export const AccountPopover = (props) => {
         <Typography
           color="text.secondary"
           variant="body2"
-        >
-          Anika Visser
+        >{auth.user?.email}
         </Typography>
       </Box>
-      <Divider />
+      <Divider/>
       <MenuList
         disablePadding
         dense

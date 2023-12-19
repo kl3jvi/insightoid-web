@@ -19,58 +19,54 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
 
 const statusMap = {
-  pending: 'warning',
-  delivered: 'success',
-  refunded: 'error'
+  resolved: 'success',
+  regressed: 'error',
+  unresolved: 'warning'
 };
-
-export const OverviewLatestOrders = (props) => {
-  const { orders = [], sx } = props;
-
+export const OverviewIssues = (props) => {
+  const { issues = [], sx } = props;
   return (
     <Card sx={sx}>
-      <CardHeader title="Latest Orders" />
+      <CardHeader title="Issue Overview"/>
       <Scrollbar sx={{ flexGrow: 1 }}>
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Order
+                  Thread Name
                 </TableCell>
                 <TableCell>
-                  Customer
-                </TableCell>
-                <TableCell sortDirection="desc">
-                  Date
+                  Exception Name
                 </TableCell>
                 <TableCell>
-                  Status
+                  Exception Message
+                </TableCell>
+                <TableCell>
+                  Time Stamp
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => {
-                const createdAt = format(order.createdAt, 'dd/MM/yyyy');
+              {issues.map((issue) => {
+                const timeStamp = format(new Date(issue?.timeStamp ?? 1), 'dd MMM yyyy HH:mm');
 
                 return (
                   <TableRow
                     hover
-                    key={order.id}
+                    key={issue.threadId}
                   >
                     <TableCell>
-                      {order.ref}
+                      {issue.threadName}
                     </TableCell>
                     <TableCell>
-                      {order.customer.name}
+                      {issue.exceptionName}
                     </TableCell>
                     <TableCell>
-                      {createdAt}
+                      {issue.exceptionMessage}
                     </TableCell>
                     <TableCell>
-                      <SeverityPill color={statusMap[order.status]}>
-                        {order.status}
-                      </SeverityPill>
+                      {timeStamp}
                     </TableCell>
                   </TableRow>
                 );
@@ -79,13 +75,13 @@ export const OverviewLatestOrders = (props) => {
           </Table>
         </Box>
       </Scrollbar>
-      <Divider />
+      <Divider/>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           color="inherit"
           endIcon={(
             <SvgIcon fontSize="small">
-              <ArrowRightIcon />
+              <ArrowRightIcon/>
             </SvgIcon>
           )}
           size="small"
@@ -98,7 +94,7 @@ export const OverviewLatestOrders = (props) => {
   );
 };
 
-OverviewLatestOrders.prototype = {
-  orders: PropTypes.array,
+OverviewIssues.prototype = {
+  issues: PropTypes.array,
   sx: PropTypes.object
 };
